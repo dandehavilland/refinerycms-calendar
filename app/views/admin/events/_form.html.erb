@@ -9,6 +9,11 @@
     <%= f.text_field :title, :class => 'larger widest' -%>
   </div>
   
+  <div class='field'>
+    <%= f.label :subtitle -%>
+    <%= f.text_field :subtitle, :class => 'larger widest' -%>
+  </div>
+  
   <% if @event_categories.any? -%>
     <div class='field'>
       <h2>Categories</h2>
@@ -26,6 +31,23 @@
       </ul>
     </div>
   <% end -%>
+  
+  <div class='field'>
+    <table>
+      <tbody>
+        <tr>
+          <td>
+    <%= f.label :level -%>
+    <%= f.select :level, options_for_select([1,2,3], @event.level)%>
+    </td>
+    <td>
+    <%= f.label :combined_level -%>
+    <%= f.select :combined_level, options_for_select([1,2,3], @event.combined_level)%>
+    </td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
   
   <div class='field'>
     <%= f.label :start_at -%>
