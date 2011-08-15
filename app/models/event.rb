@@ -25,6 +25,11 @@ class Event < ActiveRecord::Base
   
   belongs_to :image
   
+  # move this to an extension or what?
+  attr_accessor :duration, :cell_span
+  
+  translates :title, :description if respond_to?(:translates)
+  
   def current?
     end_at >= Time.now
   end
