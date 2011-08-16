@@ -1,6 +1,17 @@
 <li class='clearfix record <%= cycle("on", "on-hover") %>' id="<%= dom_id(event) -%>">
   <span class='title'>
     <%= truncate strip_tags(event.title), :length => 60 %>
+    <% if ::Refinery.i18n_enabled? and ::Refinery::I18n.frontend_locales.many? and
+          (locales = event.translations.map(&:locale)).present? %>
+      <span class='preview'>
+        <% (::Refinery::I18n.frontend_locales).each do |locale| %>
+          <% image = "flags/#{locale}.png"%>
+          <%= link_to refinery_icon_tag(image, :size => '16x11'),
+                      edit_admin_item_path(event, :switch_locale => locale),
+                      :class => "locale #{"missing_locale" unless locales.include?(locale)}" %>
+        <% end %>
+      </span>
+    <% end %>
     <span class="preview">(<%= event.start_at.strftime('%b %d, %Y') %>) <%= '***Featured***' if event.featured? %></span>
   </span>
   <span class='actions'>
