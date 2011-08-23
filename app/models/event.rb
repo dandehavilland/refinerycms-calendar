@@ -28,35 +28,7 @@ class Event < ActiveRecord::Base
   # move this to an extension or what?
   attr_accessor :duration, :cell_span
   
-  translates :title, :description if respond_to?(:translates)
-  
-  
-  if defined?(::Event::Translation)
-    after_create :ensure_all_locales_exist
-
-    ::Event.translation_class.send :attr_accessible, *Event.translated_attribute_names
-
-    def ensure_all_locales_exist
-      existing_locales = translations.map(&:locale)
-      missing_locales = Refinery::I18n.frontend_locales - existing_locales
-      fallback_translation_attrs = (translations.where(:locale => :en).first || self.translation).attributes.symbolize_keys
-      missing_locales.each do |locale|
-        translations.create(fallback_translation_attrs.merge(:locale => locale, :master_locale => :en))
-      end
-    end
-    
-    after_update :ensure_all_cloned_locales_are_updated
-    def ensure_all_cloned_locales_are_updated
-      cloned_locales = translations.where(:master_locale => :en).map(&:locale)
-      master_locale = translations.where(:locale => :en).first
-      cloned_locales.each do |locale|
-        cloned_translation = translations.where(:locale => locale).first
-        translations.update(cloned_translation.id, master_locale.attributes.merge(:id => cloned_translation.id, :locale => locale, :master_locale => :en))
-      end
-    end
-  end
-  
-  
+  translates :title, :description, :fallbacks_for_empty_translations => true if respond_to?(:translates)
   
   def current?
     end_at >= Time.now
