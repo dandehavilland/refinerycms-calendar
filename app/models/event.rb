@@ -21,7 +21,7 @@ class Event < ActiveRecord::Base
   validates :ticket_link, :format => /^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$/ix, :allow_blank => true
   validate :ends_after_start
   
-  has_friendly_id :title, :use_slug => true
+  # has_friendly_id :title, :use_slug => true
   
   belongs_to :image
   
