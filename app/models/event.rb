@@ -2,7 +2,7 @@ class Event < ActiveRecord::Base
   has_many :event_categorizations
   has_many :categories, :through => :event_categorizations, :source => :event_category
   
-  default_scope order('start_at ASC')
+  default_scope includes(:translations, :image).order('start_at ASC')
     
   scope :current, where(['start_at < ? and end_at >= ?', Time.now, Time.now])
   scope :upcoming, where(['start_at >= ?', Time.now])
